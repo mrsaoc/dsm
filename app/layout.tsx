@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 // Configurando a fonte Poppins
@@ -23,6 +24,7 @@ export default function RootLayout({
         <html lang="pt-br">
         <body className={`${poppins.className} bg-neutral-950 text-neutral-200 antialiased selection:bg-white/20`}>
         {children}
+        <Analytics />
         </body>
         </html>
     );
