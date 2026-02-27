@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { Disciplina } from "@/data/disciplinas";
 
 const IconClock = () => (
@@ -15,20 +15,77 @@ interface Props {
 }
 
 export function CourseCard({ data, isToday, onClick }: Props) {
+    const [status, setStatus] = useState<'other' | 'today' | 'live'>('other');
+
+    useEffect(() => {
+        if (!isToday) {
+            setStatus('other');
+            return;
+        }
+
+        const checkStatus = () => {
+            const agora = new Date();
+            const horaAtual = agora.getHours();
+            const minAtual = agora.getMinutes();
+            const tempoAtual = horaAtual * 60 + minAtual;
+
+            // Parsing da string "15:00 - 18:30"
+            const [inicioStr, fimStr] = data.horarios.split(' - ');
+
+            const [hInicio, mInicio] = inicioStr.split(':').map(Number);
+            const [hFim, mFim] = fimStr.split(':').map(Number);
+
+            const tempoInicio = hInicio * 60 + mInicio;
+            const tempoFim = hFim * 60 + mFim;
+
+            if (tempoAtual >= tempoInicio && tempoAtual <= tempoFim) {
+                setStatus('live');
+            } else {
+                setStatus('today');
+            }
+        };
+
+        checkStatus();
+        // Atualiza a cada minuto para o card "virar" LIVE sozinho
+        const interval = setInterval(checkStatus, 60000);
+        return () => clearInterval(interval);
+    }, [isToday, data.horarios]);
+
     return (
         <button
             onClick={onClick}
-            className="group relative flex text-left h-full flex-col w-full overflow-hidden rounded-[2rem] p-6 transition-all duration-500 hover:scale-[1.02] cursor-pointer active:scale-[0.98]"
+            className={`
+                group relative flex text-left h-full flex-col w-full overflow-hidden rounded-[2rem] p-6 
+                transition-all duration-500 cursor-pointer active:scale-[0.98]
+                ${status === 'live'
+                ? 'scale-[1.03] ring-2 ring-white/20 z-20 shadow-[0_0_30px_rgba(255,255,255,0.05)]'
+                : 'hover:scale-[1.02]'
+            }
+            `}
+            style={{
+                boxShadow: status === 'live' ? `0 0 25px -5px ${data.cor}33` : undefined,
+                borderColor: status === 'live' ? `${data.cor}55` : undefined
+            }}
         >
             {/* 1. CAMADA DE FUNDO (GLASS) */}
-            <div className="absolute inset-0 bg-white/5 backdrop-blur-xl transition-colors duration-500 group-hover:bg-white/10" />
+            <div className={`
+                absolute inset-0 transition-colors duration-500 
+                ${status === 'live' ? 'bg-white/10' : 'bg-white/5 group-hover:bg-white/10'} 
+                backdrop-blur-xl
+            `} />
 
-            {/* 2. BORDA FINA - Reage ao hover ficando mais clara */}
-            <div className="absolute inset-0 rounded-[2rem] ring-1 ring-inset ring-white/10 group-hover:ring-white/20 transition-all duration-500" />
+            {/* 2. BORDA DINÂMICA */}
+            <div className={`
+                absolute inset-0 rounded-[2rem] ring-1 ring-inset transition-all duration-500
+                ${status === 'live' ? 'ring-white/30' : 'ring-white/10 group-hover:ring-white/20'}
+            `} />
 
-            {/* 3. LUZ AMBIENTE */}
+            {/* 3. LUZ AMBIENTE (Mais intensa se for LIVE) */}
             <div
-                className="absolute -right-12 -top-12 h-40 w-40 rounded-full blur-[60px] opacity-20 transition-opacity duration-700 group-hover:opacity-40"
+                className={`
+                    absolute -right-12 -top-12 h-40 w-40 rounded-full blur-[60px] transition-opacity duration-700
+                    ${status === 'live' ? 'opacity-50 animate-pulse' : 'opacity-20 group-hover:opacity-40'}
+                `}
                 style={{ backgroundColor: data.cor }}
             />
 
@@ -42,16 +99,31 @@ export function CourseCard({ data, isToday, onClick }: Props) {
                         {data.id}
                     </div>
 
-                    {isToday && (
-                        <div className="relative flex h-3 w-3 mt-1 mr-1">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500 shadow-[0_0_10px_rgba(74,222,128,0.5)]"></span>
-                        </div>
-                    )}
+                    {/* INDICADORES DE TEMPO */}
+                    <div className="flex flex-col items-end gap-1">
+                        {status === 'live' && (
+                            <div className="flex items-center gap-2 bg-white/10 px-2.5 py-1 rounded-full border border-white/10">
+                                <span className="text-[10px] font-bold text-white uppercase tracking-wider">Agora</span>
+                                <div className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                </div>
+                            </div>
+                        )}
+                        {status === 'today' && (
+                            <div className="flex items-center gap-1.5 opacity-60">
+                                <span className="text-[10px] font-medium text-white uppercase tracking-wider">Hoje</span>
+                                <div className="h-1.5 w-1.5 rounded-full bg-white/40" />
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className="space-y-1 mb-6 flex-grow">
-                    <h2 className="text-lg font-semibold leading-tight text-white tracking-wide group-hover:text-white transition-colors">
+                    <h2 className={`
+                        text-lg font-semibold leading-tight tracking-wide transition-colors
+                        ${status === 'live' ? 'text-white' : 'text-neutral-100 group-hover:text-white'}
+                    `}>
                         {data.nome}
                     </h2>
                     <p className="text-sm font-light text-neutral-400 group-hover:text-neutral-300 transition-colors">
@@ -60,12 +132,18 @@ export function CourseCard({ data, isToday, onClick }: Props) {
                 </div>
 
                 <div className="mt-auto grid grid-cols-2 gap-2">
-                    <div className="flex min-h-[44px] items-center gap-2 rounded-xl bg-black/20 px-3 py-2 text-xs text-neutral-300 leading-tight border border-white/5 group-hover:border-white/10 transition-colors">
+                    <div className={`
+                        flex min-h-[44px] items-center gap-2 rounded-xl px-3 py-2 text-xs leading-tight border transition-colors
+                        ${status === 'live' ? 'bg-white/10 border-white/20 text-white' : 'bg-black/20 border-white/5 text-neutral-300 group-hover:border-white/10'}
+                    `}>
                         <IconClock />
                         <span>{data.horarios}</span>
                     </div>
 
-                    <div className="flex min-h-[44px] items-center gap-2 rounded-xl bg-black/20 px-3 py-2 text-xs text-neutral-300 leading-tight border border-white/5 group-hover:border-white/10 transition-colors">
+                    <div className={`
+                        flex min-h-[44px] items-center gap-2 rounded-xl px-3 py-2 text-xs leading-tight border transition-colors
+                        ${status === 'live' ? 'bg-white/10 border-white/20 text-white' : 'bg-black/20 border-white/5 text-neutral-300 group-hover:border-white/10'}
+                    `}>
                         <IconMap />
                         <span className="truncate">{data.sala}</span>
                     </div>
