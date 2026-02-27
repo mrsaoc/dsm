@@ -1,0 +1,21 @@
+{
+  "name": "DSM Painel",
+  "short_name": "DSM",
+  "description": "Painel de aulas e materiais DSM 4º Ciclo",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

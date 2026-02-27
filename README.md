@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DSM - Painel de Aulas (4º Ciclo)
 
-## Getting Started
+Aplicação web desenvolvida para centralizar materiais de estudo e horários de aula da turma de Desenvolvimento de Software Multiplataforma. O projeto foca em uma interface minimalista e funcionalidade mobile-first.
 
-First, run the development server:
+## Funcionalidades Principais
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Filtro por Dia:** Navegação entre os dias da semana através de um grid fixo, permitindo visualizar o cronograma específico de cada dia.
+- **Sinalizador de Aula Ativa:** Identificação automática do horário atual para destacar visualmente a disciplina que está ocorrendo no momento.
+- **Integração com Google Drive:**
+    - Navegação de pastas e subpastas integrada ao painel.
+    - Acesso direto a arquivos de aula.
+- **Upload Comunitário:** Sistema de envio de arquivos para o Drive da turma utilizando Service Account, permitindo a colaboração entre alunos.
+- **PWA (Instalável):** Suporte para instalação na tela inicial de dispositivos móveis, funcionando como um aplicativo nativo.
+- **Sistema de Notificações:** Feedback visual via Toasts para confirmação de ações de upload e mensagens de erro.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologias Utilizadas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework:** Next.js 14+ (App Router)
+- **Estilização:** Tailwind CSS
+- **Ícones:** Lucide React
+- **Backend:** Google Drive API v3 (Server Actions)
+- **Notificações:** Sonner
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Configuração Local
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Clone o repositório:
+   ```bash
+   git clone [https://github.com/mrsaoc/dsm.git](https://github.com/mrsaoc/dsm.git)
