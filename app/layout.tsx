@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner"; // Importamos o Toaster
 
-// Configurando a fonte Poppins
-const poppins = Poppins({
+const geistSans = Geist({
+    variable: "--font-geist-sans",
     subsets: ["latin"],
-    weight: ["300", "400", "500", "600"], // Pesos: Leve, Normal, Médio, Semi-Bold
-    variable: "--font-poppins",
+});
+
+const geistMono = Geist_Mono({
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-    title: "FATEC DSM | Dashboard",
-    description: "Painel de controle acadêmico",
+    title: "DSM • Painel de Aulas",
+    description: "Gerenciamento de materiais e horários",
 };
 
 export default function RootLayout({
@@ -20,9 +24,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="pt-br">
-        <body className={`${poppins.className} bg-neutral-950 text-neutral-200 antialiased selection:bg-white/20`}>
+        <html lang="pt-BR">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-neutral-950`}>
         {children}
+        {/* O Toaster fica aqui embaixo para não atrapalhar o layout */}
+        <Toaster theme="dark" position="top-center" richColors />
         </body>
         </html>
     );

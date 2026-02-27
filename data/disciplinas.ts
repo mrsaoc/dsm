@@ -80,4 +80,14 @@ export const disciplinas: Disciplina[] = [
         cor: "#60A5FA", // Azul Céu
         linkDrive: "https://drive.google.com/drive/folders/1TDBQWckKLJCVhsY78yTvy12l_ttIhffI?usp=drive_link",
     },
+    {
+        id: "TEST",
+        nome: "Aula de Teste",
+        professor: "Dr. Debug",
+        horarios: "18:50 - 22:00", // Coloque um horário que englobe o agora
+        sala: "Lab Teste",
+        dias: [5], // 5 é Sexta-feira, mude para o número do seu dia atual
+        linkDrive: "https://google.com",
+        cor: "#FF5733"
+    },
 ];
