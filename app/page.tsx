@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { disciplinas, Disciplina } from "@/data/disciplinas";
 import { CourseCard } from "@/components/CourseCard";
 import { DriveDrawer } from "@/components/DriveDrawer";
+import { InstallPWA } from "@/components/InstallPWA";
 
 const DIAS_SEMANA = [
     { id: 99, label: 'Tds' },
@@ -135,6 +136,8 @@ export default function Home() {
                 disciplina={selectedCourse}
                 onClose={() => setSelectedCourse(null)}
             />
+
+            <InstallPWA />
         </main>
     );
 }
