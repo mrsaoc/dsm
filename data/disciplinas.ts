@@ -52,7 +52,7 @@ export const disciplinas: Disciplina[] = [
     },
     {
         id: "PDM1",
-        nome: "Prog. de Dispositivos Móveis I",
+        nome: "Programação de Dispositivos Móveis I",
         professor: "Alessandro",
         sala: "Lab 08",
         dias: [4], // Quinta

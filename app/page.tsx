@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { disciplinas, Disciplina } from "@/data/disciplinas";
 import { CourseCard } from "@/components/CourseCard";
 import { DriveDrawer } from "@/components/DriveDrawer";
+import { Coffee } from "lucide-react"; // Adicionamos um ícone para o estado vazio
 
 const DIAS_SEMANA = [
     { id: 99, label: 'Tds' },
@@ -25,18 +26,12 @@ export default function Home() {
         const dataAtual = new Date();
         const diaAtual = dataAtual.getDay();
         setHoje(diaAtual);
-
         setDiaSelecionado(diaAtual >= 1 && diaAtual <= 5 ? diaAtual : 99);
-
         setDataHoje(dataAtual.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' }));
     }, []);
 
     useEffect(() => {
-        if (selectedCourse) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
-        }
+        document.body.style.overflow = selectedCourse ? 'hidden' : 'auto';
     }, [selectedCourse]);
 
     const handleDiaChange = (id: number) => {
@@ -45,7 +40,7 @@ export default function Home() {
         setTimeout(() => {
             setDiaSelecionado(id);
             setIsTransitioning(false);
-        }, 150);
+        }, 300);
     };
 
     const disciplinasDoDia = diaSelecionado === 99
@@ -55,23 +50,23 @@ export default function Home() {
     if (hoje === -1) return null;
 
     return (
-        <main className="relative min-h-screen overflow-hidden bg-neutral-950 px-6 py-12 md:px-12 selection:bg-white/20">
-            {/* EFEITOS DE FUNDO */}
-            <div className="pointer-events-none absolute -left-40 -top-40 h-[500px] w-[500px] rounded-full bg-purple-900/20 blur-[100px]" />
-            <div className="pointer-events-none absolute -right-40 bottom-0 h-[500px] w-[500px] rounded-full bg-blue-900/10 blur-[100px]" />
+        <main className="relative min-h-screen overflow-hidden bg-[#050505] px-6 py-12 md:px-12 selection:bg-white/20">
+            {/* LUZES AMBIENTES ESTILO APPLE (Mantidas do passo 1) */}
+            <div className="pointer-events-none absolute inset-0 flex justify-center">
+                <div className="absolute -top-[20%] w-[1000px] h-[600px] rounded-full bg-white/[0.03] blur-[120px]" />
+                <div className="absolute top-[40%] -left-[10%] w-[500px] h-[500px] rounded-full bg-white/[0.015] blur-[100px]" />
+            </div>
 
             <div className="relative mx-auto max-w-6xl z-10">
-                <header className="mb-10 flex flex-col gap-6">
-
-                    {/* TOP BAR: CICLO */}
+                <header className="mb-12 flex flex-col gap-6">
                     <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium uppercase tracking-[0.2em] text-neutral-500">
+                        <span className="text-[10px] font-semibold uppercase tracking-[0.3em] text-neutral-500">
                             DSM • 4º Ciclo
                         </span>
                     </div>
 
-                    {/* NAVEGAÇÃO: GRID FIXO (SEM ROLL/SCROLL) */}
-                    <nav className="grid grid-cols-6 gap-1 bg-white/5 p-1 rounded-2xl border border-white/5 backdrop-blur-md max-w-md sm:max-w-lg">
+                    {/* NAVEGAÇÃO: Interações baseadas em Opacidade (Sem escalas robóticas) */}
+                    <nav className="grid grid-cols-6 gap-1.5 bg-white/[0.03] p-1.5 rounded-[1.25rem] border border-white/[0.05] backdrop-blur-2xl max-w-md sm:max-w-lg shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                         {DIAS_SEMANA.map((dia) => {
                             const isActive = diaSelecionado === dia.id;
                             const isRealToday = hoje === dia.id && dia.id !== 99;
@@ -82,41 +77,45 @@ export default function Home() {
                                     onClick={() => handleDiaChange(dia.id)}
                                     className={`
                                         relative py-2.5 rounded-xl text-[11px] sm:text-sm font-medium 
-                                        transition-all duration-300 cursor-pointer outline-none text-center
+                                        transition-colors duration-500 ease-out cursor-pointer outline-none text-center
+                                        active:opacity-50 active:duration-0 /* O segredo do toque Apple: resposta instantânea no clique, retorno suave */
                                         ${isActive
-                                        ? 'bg-white/10 text-white shadow-sm ring-1 ring-white/10'
-                                        : 'text-neutral-500 hover:text-neutral-200 hover:bg-white/5'
+                                        ? 'bg-white/[0.12] text-white shadow-[0_2px_10px_rgba(0,0,0,0.2)] border border-white/[0.08]'
+                                        : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/[0.04] border border-transparent'
                                     }
                                     `}
                                 >
                                     {dia.label}
                                     {isRealToday && (
-                                        <span className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full ${isActive ? 'bg-white' : 'bg-neutral-600'}`} />
+                                        <span className={`absolute bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full transition-colors duration-500 ${isActive ? 'bg-white' : 'bg-neutral-700'}`} />
                                     )}
                                 </button>
                             );
                         })}
                     </nav>
 
-                    {/* TÍTULO E DATA */}
-                    <div className="flex items-baseline justify-between">
-                        <div className="flex flex-col gap-1">
-                            <h1 className="text-3xl font-semibold text-white md:text-4xl tracking-tight">
+                    <div className="flex items-baseline justify-between mt-2">
+                        <div className="flex flex-col gap-1.5">
+                            <h1 className="text-3xl font-medium text-neutral-100 md:text-4xl tracking-tight">
                                 Minhas Aulas
                             </h1>
-                            <p className="text-sm text-neutral-600">{dataHoje}</p>
+                            <p className="text-sm text-neutral-500 font-light tracking-wide">{dataHoje}</p>
                         </div>
                     </div>
                 </header>
 
-                {/* GRID DE DISCIPLINAS */}
-                <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'}`}>
+                <div className={`transition-all duration-500 ease-out ${isTransitioning ? 'opacity-0 translate-y-4 scale-[0.99]' : 'opacity-100 translate-y-0 scale-100'}`}>
                     {disciplinasDoDia.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-20 text-neutral-500 border border-white/5 rounded-3xl bg-white/5 border-dashed">
-                            <p>Nenhuma aula programada.</p>
+                        /* EMPTY STATE PREMIUM (Substitui aquela caixa de erro tracejada) */
+                        <div className="flex flex-col items-center justify-center py-24 text-neutral-600 animate-in fade-in duration-1000">
+                            <div className="w-16 h-16 mb-5 rounded-[1.25rem] bg-white/[0.02] border border-white/[0.05] flex items-center justify-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
+                                <Coffee className="w-6 h-6 opacity-40 text-neutral-400" strokeWidth={1.5} />
+                            </div>
+                            <p className="text-sm font-medium tracking-wide text-neutral-300">Dia livre</p>
+                            <p className="text-[13px] font-light tracking-wide text-neutral-500 mt-1">Nenhuma aula programada para hoje.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr">
+                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 auto-rows-fr">
                             {disciplinasDoDia.map((disciplina) => (
                                 <CourseCard
                                     key={disciplina.id}
