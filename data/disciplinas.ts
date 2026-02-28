@@ -80,4 +80,5 @@ export const disciplinas: Disciplina[] = [
         cor: "#60A5FA", // Azul Céu
         linkDrive: "https://drive.google.com/drive/folders/1TDBQWckKLJCVhsY78yTvy12l_ttIhffI?usp=drive_link",
     },
+
 ];
