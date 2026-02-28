@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { disciplinas, Disciplina } from "@/data/disciplinas";
 import { CourseCard } from "@/components/CourseCard";
 import { DriveDrawer } from "@/components/DriveDrawer";
-import { InstallPWA } from "@/components/InstallPWA";
 
 const DIAS_SEMANA = [
     { id: 99, label: 'Tds' },
@@ -27,7 +26,6 @@ export default function Home() {
         const diaAtual = dataAtual.getDay();
         setHoje(diaAtual);
 
-        // Seleção inteligente do dia inicial
         setDiaSelecionado(diaAtual >= 1 && diaAtual <= 5 ? diaAtual : 99);
 
         setDataHoje(dataAtual.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' }));
@@ -136,8 +134,6 @@ export default function Home() {
                 disciplina={selectedCourse}
                 onClose={() => setSelectedCourse(null)}
             />
-
-            <InstallPWA />
         </main>
     );
 }
